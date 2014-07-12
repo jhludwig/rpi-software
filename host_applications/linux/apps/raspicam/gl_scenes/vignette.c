@@ -62,30 +62,12 @@ static RASPITEXUTIL_SHADER_PROGRAM_T vignette_shader = {
       "vec2 uv = ( texcoord - vec2( 0.5 ) ) * vec2( offset );\n" 
       "gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );\n" 
     "}\n",
-    
+
     .uniform_names = {"tex"},
     .attribute_names = {"vertex"},
 };
 
 
-static int vignette_init(RASPITEX_STATE *state)
-{
-    int rc = raspitexutil_gl_init_2_0(state);
-    if (rc != 0)
-       goto end;
-
-    rc = raspitexutil_build_shader_program(&vignette_shader);
-
-end:
-    return rc;
-}
-
-
-/**
- * Creates the OpenGL ES 2.X context and builds the shaders.
- * @param raspitex_state A pointer to the GL preview state.
- * @return Zero if successful.
- */
 static int vignette_init(RASPITEX_STATE *state)
 {
     int rc = raspitexutil_gl_init_2_0(state);
