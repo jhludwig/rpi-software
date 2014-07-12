@@ -15,6 +15,7 @@ set (GL_SCENE_SOURCES
    gl_scenes/teapot.c
    gl_scenes/blur.c
    gl_scenes/vignette.c
+   gl_scens/dot.c
 
    )
 
