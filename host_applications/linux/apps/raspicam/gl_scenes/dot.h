@@ -32,6 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "RaspiTex.h"
 
-int vignette_open(RASPITEX_STATE *state);
+int dot_open(RASPITEX_STATE *state);
 
 #endif /* DOT_H */
