@@ -61,9 +61,9 @@ static RASPITEXUTIL_SHADER_PROGRAM_T dot_shader = {
     "const float tSize = 256.0;\n"
     "float pattern() {\n"
       "float s = sin( angle ), c = cos( angle );\n"
-      "vec2 tex = texcoord * tSize - center;",
-      "vec2 point = vec2( c * tex.x - s * tex.y, s * tex.x + c * tex.y ) * scale;",
-      "return ( sin( point.x ) * sin( point.y ) ) * 4.0;",
+      "vec2 tex = texcoord * tSize - center;\n"
+      "vec2 point = vec2( c * tex.x - s * tex.y, s * tex.x + c * tex.y ) * scale;\n"
+      "return ( sin( point.x ) * sin( point.y ) ) * 4.0;\n"
     "}\n"
     "void main() {\n"
       "vec4 color = texture2D( tex, texcoord );\n"
