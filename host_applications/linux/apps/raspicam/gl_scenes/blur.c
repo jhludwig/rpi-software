@@ -54,7 +54,7 @@ static RASPITEXUTIL_SHADER_PROGRAM_T blur_shader = {
     .fragment_source =
     "#extension GL_OES_EGL_image_external : require\n"
     "uniform samplerExternalOES tex;\n"
-    "const float blurSize = 1.0/512.0;\n" 
+    "const float blurSize = 20.0/512.0;\n" 
     "varying vec2 texcoord;\n"
     "void main(void) {\n" 
     "    vec4 sum = vec4(0.0);\n" 

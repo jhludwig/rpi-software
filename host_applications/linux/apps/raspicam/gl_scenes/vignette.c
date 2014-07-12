@@ -55,7 +55,7 @@ static RASPITEXUTIL_SHADER_PROGRAM_T vignette_shader = {
     "#extension GL_OES_EGL_image_external : require\n" 
     "uniform samplerExternalOES tex;\n" 
     "varying vec2 texcoord;\n" 
-    "const float darkness = 1.0;\n" 
+    "const float darkness = 5.0;\n" 
     "const float offset = 1.0;\n" 
     "void main(void) {\n" 
       "vec4 texel = texture2D( tex, texcoord );\n" 
