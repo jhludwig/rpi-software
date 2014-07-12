@@ -54,22 +54,22 @@ static RASPITEXUTIL_SHADER_PROGRAM_T blur_shader = {
     .fragment_source =
     "#extension GL_OES_EGL_image_external : require\n"
     "uniform samplerExternalOES tex;\n"
-    "const float blurSize = 1.0/512.0;\n" \
+    "const float blurSize = 1.0/512.0;\n" 
     "varying vec2 texcoord;\n"
-    "void main(void) {\n" \
-    "    vec4 sum = vec4(0.0);\n" \
-    "    sum += texture2D(tex, vec2(texCoord.x, texCoord.y - 4.0*blurSize)) * 0.05;\n" \
-    "    sum += texture2D(tex, vec2(texCoord.x, texCoord.y - 3.0*blurSize)) * 0.09;\n" \
-    "    sum += texture2D(tex, vec2(texCoord.x, texCoord.y - 2.0*blurSize)) * 0.12;\n" \
-    "    sum += texture2D(tex, vec2(texCoord.x, texCoord.y - blurSize)) * 0.15;\n" \
-    "    sum += texture2D(tex, vec2(texCoord.x, texCoord.y)) * 0.16;\n" \
-    "    sum += texture2D(tex, vec2(texCoord.x, texCoord.y + blurSize)) * 0.15;\n" \
-    "    sum += texture2D(tex, vec2(texCoord.x, texCoord.y + 2.0*blurSize)) * 0.12;\n" \
-    "    sum += texture2D(tex, vec2(texCoord.x, texCoord.y + 3.0*blurSize)) * 0.09;\n" \
-    "    sum += texture2D(tex, vec2(texCoord.x, texCoord.y + 4.0*blurSize)) * 0.05;\n" \
-    "    gl_FragColor = sum;\n" \
-    "    gl_FragColor.a = 1.0;\n" \
-    "}\n"
+    "void main(void) {\n" 
+    "    vec4 sum = vec4(0.0);\n" 
+    "    sum += texture2D(tex, vec2(texcoord.x, texcoord.y - 4.0*blurSize)) * 0.05;\n" 
+    "    sum += texture2D(tex, vec2(texcoord.x, texcoord.y - 3.0*blurSize)) * 0.09;\n" 
+    "    sum += texture2D(tex, vec2(texcoord.x, texcoord.y - 2.0*blurSize)) * 0.12;\n" 
+    "    sum += texture2D(tex, vec2(texcoord.x, texcoord.y - blurSize)) * 0.15;\n" 
+    "    sum += texture2D(tex, vec2(texcoord.x, texcoord.y)) * 0.16;\n" 
+    "    sum += texture2D(tex, vec2(texcoord.x, texcoord.y + blurSize)) * 0.15;\n" 
+    "    sum += texture2D(tex, vec2(texcoord.x, texcoord.y + 2.0*blurSize)) * 0.12;\n" 
+    "    sum += texture2D(tex, vec2(texcoord.x, texcoord.y + 3.0*blurSize)) * 0.09;\n" 
+    "    sum += texture2D(tex, vec2(texcoord.x, texcoord.y + 4.0*blurSize)) * 0.05;\n" 
+    "    gl_FragColor = sum;\n" 
+    "    gl_FragColor.a = 1.0;\n" 
+    "}\n",
     .uniform_names = {"tex"},
     .attribute_names = {"vertex"},
 };

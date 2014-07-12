@@ -52,16 +52,17 @@ static RASPITEXUTIL_SHADER_PROGRAM_T vignette_shader = {
     "}\n",
 
     .fragment_source =
-    "#extension GL_OES_EGL_image_external : require\n" \
-    "uniform samplerExternalOES tex;\n" \
-    "varying vec2 texcoord;\n" \
-    "const float darkness = 1.0;\n" \
-    "const float offset = 1.0;\n" \
-    "void main(void) {\n" \
-      "vec4 texel = texture2D( tex, texcoord );\n" \
-      "vec2 uv = ( texcoord - vec2( 0.5 ) ) * vec2( offset );\n" \
-      "gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );\n" \
-    "}\n"
+    "#extension GL_OES_EGL_image_external : require\n" 
+    "uniform samplerExternalOES tex;\n" 
+    "varying vec2 texcoord;\n" 
+    "const float darkness = 1.0;\n" 
+    "const float offset = 1.0;\n" 
+    "void main(void) {\n" 
+      "vec4 texel = texture2D( tex, texcoord );\n" 
+      "vec2 uv = ( texcoord - vec2( 0.5 ) ) * vec2( offset );\n" 
+      "gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );\n" 
+    "}\n",
+    
     .uniform_names = {"tex"},
     .attribute_names = {"vertex"},
 };
