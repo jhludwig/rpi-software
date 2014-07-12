@@ -167,7 +167,7 @@ int raspitex_parse_cmdline(RASPITEX_STATE *state,
          else if (strcmp(arg2, "vignette") == 0)
             state->scene_id = RASPITEX_SCENE_VIGNETTE;
          else if (strcmp(arg2, "dot") == 0)
-            state->scene_id = RASPITEX_SCENE_VIGNETTE;
+            state->scene_id = RASPITEX_SCENE_DOT;
          else
             vcos_log_error("Unknown scene %s", arg2);
 
