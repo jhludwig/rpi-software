@@ -51,14 +51,16 @@ static RASPITEXUTIL_SHADER_PROGRAM_T filter_shader = {
 
 static int filter_init(RASPITEX_STATE *state)
 {
-    int rc = raspitexutil_gl_init_2_0(state);
-    if (rc != 0)
-       goto end;
-    vcos_log_info("Getting shader %s", state->filter_name);
-    // construct file names for frag and vert shaders
     int filter_name_length = strlen(state->filter_name);
     char frag_name[filter_name_length + 10];
     char vert_name[filter_name_length + 10];
+
+    int rc = raspitexutil_gl_init_2_0(state);
+    if (rc != 0)
+       goto end;
+
+    vcos_log_info("Getting shader %s", state->filter_name);
+    // construct file names for frag and vert shaders
     strcpy(frag_name, state->filter_name);
     strcat(frag_name, ".frag");
     vcos_log_info("Frag name %s", frag_name);
