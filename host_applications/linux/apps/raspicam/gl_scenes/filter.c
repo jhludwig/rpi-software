@@ -72,8 +72,7 @@ static int filter_init(RASPITEX_STATE *state)
     ssize_t bytes_read = getdelim( &vertex_source, 0, '\0', fp);
     if ( bytes_read == -1 ) {
       // handle error
-      rc = -1;
-      goto end;
+      vcos_log_error("Vertex source unreadable %s", vert_name);
     }
     fclose(fp);
     fp = fopen(frag_name, "r");
@@ -81,8 +80,7 @@ static int filter_init(RASPITEX_STATE *state)
     bytes_read = getdelim( &fragment_source, 0, '\0', fp);
     if ( bytes_read == -1 ) {
       // handle error
-      rc = -1;
-      goto end;
+      vcos_log_error("Fragment source unreadable %s", frag_name);
     }
     fclose(fp);    
 
