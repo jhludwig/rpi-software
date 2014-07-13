@@ -16,6 +16,7 @@ set (GL_SCENE_SOURCES
    gl_scenes/blur.c
    gl_scenes/vignette.c
    gl_scenes/dot.c
+   gl_scenes/filter.c
 
    )
 
