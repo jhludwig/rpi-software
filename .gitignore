@@ -10,3 +10,5 @@
 *.lai
 *.la
 *.a
+
+host_applications/linux/apps/raspicam/ftest.c

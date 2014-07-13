@@ -48,6 +48,33 @@ static RASPITEXUTIL_SHADER_PROGRAM_T filter_shader = {
     .attribute_names = {"vertex"},
 };
 
+static char* filter_load(char* filter_name) 
+{
+  char* buffer = 0;
+  long length;
+  FILE* f = fopen(filter_name, "rb");
+  if (f)
+  {
+    fseek(f, 0, SEEK_END);
+    length = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    buffer = malloc(length);
+    if (buffer)
+    {
+      fread (buffer, 1, length, f);
+    }
+    else {
+      vcos_log_error("Unable to malloc shader buffer"); 
+    }
+    fclose (f);
+  }
+  else {
+    vcos_log_error("Unable to open shader file: %s", filter_name);
+  }
+
+  return buffer;
+}
+
 
 static int filter_init(RASPITEX_STATE *state)
 {
@@ -69,26 +96,14 @@ static int filter_init(RASPITEX_STATE *state)
     vcos_log_info("Vert name %s", vert_name);  
 
     // read in contents of frag and vert shaders
-    FILE* fp = fopen(vert_name, "r");
-    char* vertex_source = NULL;
-    ssize_t bytes_read = getdelim( &vertex_source, 0, '\0', fp);
-    if ( bytes_read == -1 ) {
-      // handle error
-      vcos_log_error("Vertex source unreadable %s", vert_name);
-    }
-    fclose(fp);
-    fp = fopen(frag_name, "r");
-    char* fragment_source = NULL;
-    bytes_read = getdelim( &fragment_source, 0, '\0', fp);
-    if ( bytes_read == -1 ) {
-      // handle error
-      vcos_log_error("Fragment source unreadable %s", frag_name);
-    }
-    fclose(fp);    
+    char* vertex_source = filter_load(vert_name);
+    char* fragment_source = filter_load(frag_name);   
 
     // construct a complete shader structure.   
     filter_shader.vertex_source = vertex_source;
     filter_shader.fragment_source = fragment_source;
+
+    printf("vertex shader:\n%s\n", filter_shader.vertex_source);
 
     rc = raspitexutil_build_shader_program(&filter_shader);
 
