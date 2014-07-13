@@ -39,6 +39,8 @@ All rights reserved.
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
+static RASPITEXUTIL_SHADER_PROGRAM_T filter_shader;
+
 
 static int filter_init(RASPITEX_STATE *state)
 {
@@ -58,8 +60,8 @@ static int filter_init(RASPITEX_STATE *state)
     vcos_log_info("Vert name %s", vert_name);  
 
     // read in contents of frag and vert shaders
-    FILE *fp = fopen(vert_name);
-    char* vertex_source = null;
+    FILE* fp = fopen(vert_name, "r");
+    char* vertex_source = NULL;
     ssize_t bytes_read = getdelim( &vertex_source, 0, '\0', fp);
     if ( bytes_read == -1 ) {
       // handle error
@@ -67,9 +69,9 @@ static int filter_init(RASPITEX_STATE *state)
       goto end;
     }
     fclose(fp);
-    FILE *fp = fopen(frag_name);
-    char* fragment_source = null;
-    ssize_t bytes_read = getdelim( &fragment_source, 0, '\0', fp);
+    fp = fopen(frag_name, "r");
+    char* fragment_source = NULL;
+    bytes_read = getdelim( &fragment_source, 0, '\0', fp);
     if ( bytes_read == -1 ) {
       // handle error
       rc = -1;
@@ -79,9 +81,9 @@ static int filter_init(RASPITEX_STATE *state)
 
     // construct a complete shader structure.  we should expand the set of uniforms to 
     //   a fully populated standard set that all shaders have access to.  
-    RASPITEXUTIL_SHADER_PROGRAM_T filter_shader = {
-      .vertex_source = *vertex_source,
-      .fragment_source = *fragment_source,
+    filter_shader = {
+      .vertex_source = vertex_source,
+      .fragment_source = fragment_source,
       .uniform_names = {"tex"},
       .attribute_names = {"vertex"},
     };
