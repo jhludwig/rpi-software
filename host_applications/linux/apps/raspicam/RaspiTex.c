@@ -52,6 +52,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "gl_scenes/blur.h"
 #include "gl_scenes/vignette.h"
 #include "gl_scenes/dot.h"
+#include "gl_scenes/filter.h"
 
 /**
  * \file RaspiTex.c
@@ -102,6 +103,7 @@ static COMMAND_LIST cmdline_commands[] =
 {
    { CommandGLScene, "-glscene",  "gs",  "GL scene square,teapot,mirror,yuv,sobel,blur,vignette,dot", 1 },
    { CommandGLWin,   "-glwin",    "gw",  "GL window settings <'x,y,w,h'>", 1 },
+   { CommandGLFilter,   "-glfilter", "gf",  "GL external filter <filename>", 1 },
 };
 
 static int cmdline_commands_size = sizeof(cmdline_commands) / sizeof(cmdline_commands[0]);
@@ -171,6 +173,16 @@ int raspitex_parse_cmdline(RASPITEX_STATE *state,
          else
             vcos_log_error("Unknown scene %s", arg2);
 
+         used = 2;
+         break;
+      }
+
+      case CommandGLFilter: // Selects the GL external filter
+      {
+         state->scene_id = RASPITEX_SCENE_FILTER;
+         state->filter_name = arg2;
+         // if (CHECK FOR VALID FILTER NAME HERE -- FILE EXISTENCE)
+         //    vcos_log_error("Unknown scene %s", arg2);
          used = 2;
          break;
       }
@@ -602,6 +614,9 @@ int raspitex_init(RASPITEX_STATE *state)
          break;
       case RASPITEX_SCENE_DOT:
          rc = dot_open(state);
+         break;
+      case RASPITEX_SCENE_FILTER:
+         rc = filter_open(state);
          break;
       default:
          rc = -1;
