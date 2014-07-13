@@ -181,7 +181,7 @@ int raspitex_parse_cmdline(RASPITEX_STATE *state,
       case CommandGLFilter: // Selects the GL external filter
       {
          state->scene_id = RASPITEX_SCENE_FILTER;
-         state->filter_name = arg2;
+         strlcpy(state->filter_name, arg2, sizeof(state->filter_name));
          // if (CHECK FOR VALID FILTER NAME HERE -- FILE EXISTENCE)
          //    vcos_log_error("Unknown scene %s", arg2);
          used = 2;
