@@ -39,7 +39,14 @@ All rights reserved.
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
-static RASPITEXUTIL_SHADER_PROGRAM_T filter_shader;
+// allocate shader.  we should create a fully populated standard set of uniforms 
+//     that all shaders have access to. 
+static RASPITEXUTIL_SHADER_PROGRAM_T filter_shader = {
+    .vertex_source = NULL,
+    .fragment_source = NULL,
+    .uniform_names = {"tex"},
+    .attribute_names = {"vertex"},
+};
 
 
 static int filter_init(RASPITEX_STATE *state)
@@ -79,14 +86,9 @@ static int filter_init(RASPITEX_STATE *state)
     }
     fclose(fp);    
 
-    // construct a complete shader structure.  we should expand the set of uniforms to 
-    //   a fully populated standard set that all shaders have access to.  
-    filter_shader = {
-      .vertex_source = vertex_source,
-      .fragment_source = fragment_source,
-      .uniform_names = {"tex"},
-      .attribute_names = {"vertex"},
-    };
+    // construct a complete shader structure.   
+    filter_shader->vertex_source = vertex_source;
+    filter_shader->fragment_source = fragment_source;
 
     rc = raspitexutil_build_shader_program(&filter_shader);
 
