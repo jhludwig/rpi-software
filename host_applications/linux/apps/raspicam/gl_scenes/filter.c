@@ -76,19 +76,51 @@ static RASPITEXUTIL_SHADER_PROGRAM_T dot_shader = {
 };
 
 
-static int dot_init(RASPITEX_STATE *state)
+static int filter_init(RASPITEX_STATE *state)
 {
     int rc = raspitexutil_gl_init_2_0(state);
     if (rc != 0)
        goto end;
 
-    // construct file names for frag and vert files
-    // read in contents
-    // construct a complete shader structure
-    FILE *fp = fopen(state->filter_name)
+    // construct file names for frag and vert shaders
+    int filter_name_length = strlen(state->filter_name);
+    char *frag_name[filter_name_length + 10];
+    char *vert_name[filter_name_length + 10];
+    strcpy(frag_name, state->filter_name);
+    strcat(frag_name, ".frag");
+    strcpy(vert_name, state->filter_name);
+    strcat(vert_name, ".vert");    
+
+    // read in contents of frag and vert shaders
+    FILE *fp = fopen(vert_name);
     char* vertex_source = null;
-    ssize_t bytes_read = getdelim( &)
-    rc = raspitexutil_build_shader_program(&dot_shader);
+    ssize_t bytes_read = getdelim( &vertex_source, 0, '\0', fp);
+    if ( bytes_read == -1 ) {
+      // handle error
+      rc = -1;
+      goto end;
+    }
+    fclose(fp);
+    FILE *fp = fopen(frag_name);
+    char* fragment_source = null;
+    ssize_t bytes_read = getdelim( &fragment_source, 0, '\0', fp);
+    if ( bytes_read == -1 ) {
+      // handle error
+      rc = -1;
+      goto end;
+    }
+    fclose(fp);    
+
+    // construct a complete shader structure.  we should expand the set of uniforms to 
+    //   a fully populated standard set that all shaders have access to.  
+    RASPITEXUTIL_SHADER_PROGRAM_T filter_shader = {
+      .vertex_source = *vertex_source,
+      .fragment_source = *fragment_source,
+      .uniform_names = {"tex"},
+      .attribute_names = {"vertex"},
+    };
+
+    rc = raspitexutil_build_shader_program(&filter_shader);
 
 end:
     return rc;
@@ -101,7 +133,7 @@ end:
  * @param raspitex_state A pointer to the GL preview state.
  * @return Zero if successful.
  */
-static int dot_redraw(RASPITEX_STATE *state)
+static int filter_redraw(RASPITEX_STATE *state)
 {
 
     // Start with a clear screen
@@ -110,8 +142,8 @@ static int dot_redraw(RASPITEX_STATE *state)
     // Bind the OES texture which is used to render the camera preview
     glBindTexture(GL_TEXTURE_EXTERNAL_OES, state->texture);
 
-    GLCHK(glUseProgram(dot_shader.program));
-    GLCHK(glEnableVertexAttribArray(dot_shader.attribute_locations[0]));
+    GLCHK(glUseProgram(filter_shader.program));
+    GLCHK(glEnableVertexAttribArray(filter_shader.attribute_locations[0]));
     GLfloat varray[] = {
         -1.0f, -1.0f,
         1.0f,  1.0f,
@@ -121,20 +153,20 @@ static int dot_redraw(RASPITEX_STATE *state)
         1.0f,  1.0f,
         -1.0f, -1.0f,
     };
-    GLCHK(glVertexAttribPointer(dot_shader.attribute_locations[0], 2, GL_FLOAT, GL_FALSE, 0, varray));
+    GLCHK(glVertexAttribPointer(filter_shader.attribute_locations[0], 2, GL_FLOAT, GL_FALSE, 0, varray));
 
     GLCHK(glDrawArrays(GL_TRIANGLES, 0, 6));
 
-    GLCHK(glDisableVertexAttribArray(dot_shader.attribute_locations[0]));
+    GLCHK(glDisableVertexAttribArray(filter_shader.attribute_locations[0]));
     GLCHK(glUseProgram(0));
 
    return 0;
 }
 
-int dot_open(RASPITEX_STATE *state)
+int filter_open(RASPITEX_STATE *state)
 {
-   state->ops.gl_init = dot_init;
-   state->ops.redraw = dot_redraw;
+   state->ops.gl_init = filter_init;
+   state->ops.redraw = filter_redraw;
    state->ops.update_texture = raspitexutil_update_texture;
    return 0;
 }
