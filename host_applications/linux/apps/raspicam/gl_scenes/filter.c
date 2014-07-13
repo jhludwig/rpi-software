@@ -40,56 +40,22 @@ All rights reserved.
 #include <EGL/eglext.h>
 
 
-/* Simple vertical blur shader  */
-
-static RASPITEXUTIL_SHADER_PROGRAM_T dot_shader = {
-    .vertex_source =
-    "attribute vec2 vertex;\n"
-    "varying vec2 texcoord;"
-    "void main(void) {\n"
-    "   texcoord = 0.5 * (vertex + 1.0);\n"
-    "   gl_Position = vec4(vertex, 0.0, 1.0);\n"
-    "}\n",
-
-    .fragment_source =
-    "#extension GL_OES_EGL_image_external : require\n" 
-    "uniform samplerExternalOES tex;\n" 
-    "varying vec2 texcoord;\n" 
-    "const float angle = 1.57;\n" 
-    "const float scale = 1.0;\n" 
-    "const float center = 0.5;\n"
-    "const float tSize = 256.0;\n"
-    "float pattern() {\n"
-      "float s = sin( angle ), c = cos( angle );\n"
-      "vec2 tex = texcoord * tSize - center;\n"
-      "vec2 point = vec2( c * tex.x - s * tex.y, s * tex.x + c * tex.y ) * scale;\n"
-      "return ( sin( point.x ) * sin( point.y ) ) * 4.0;\n"
-    "}\n"
-    "void main() {\n"
-      "vec4 color = texture2D( tex, texcoord );\n"
-      "float average = ( color.r + color.g + color.b ) / 3.0;\n"
-      "gl_FragColor = vec4( vec3( average * 10.0 - 5.0 + pattern() ), color.a );\n"
-    "}\n",
-
-    .uniform_names = {"tex"},
-    .attribute_names = {"vertex"},
-};
-
-
 static int filter_init(RASPITEX_STATE *state)
 {
     int rc = raspitexutil_gl_init_2_0(state);
     if (rc != 0)
        goto end;
-
+    vcos_log_info("Getting shader %s", state->filter_name);
     // construct file names for frag and vert shaders
     int filter_name_length = strlen(state->filter_name);
     char *frag_name[filter_name_length + 10];
     char *vert_name[filter_name_length + 10];
     strcpy(frag_name, state->filter_name);
     strcat(frag_name, ".frag");
+    vcos_log_info("Frag name %s", frag_name);
     strcpy(vert_name, state->filter_name);
-    strcat(vert_name, ".vert");    
+    strcat(vert_name, ".vert");  
+    vcos_log_info("Vert name %s", vert_name);  
 
     // read in contents of frag and vert shaders
     FILE *fp = fopen(vert_name);
