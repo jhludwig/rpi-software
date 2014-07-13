@@ -87,8 +87,8 @@ static int filter_init(RASPITEX_STATE *state)
     fclose(fp);    
 
     // construct a complete shader structure.   
-    filter_shader->vertex_source = vertex_source;
-    filter_shader->fragment_source = fragment_source;
+    filter_shader.vertex_source = vertex_source;
+    filter_shader.fragment_source = fragment_source;
 
     rc = raspitexutil_build_shader_program(&filter_shader);
 
