@@ -98,6 +98,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define CommandGLScene   1
 #define CommandGLWin     2
+#define CommandGLFilter  3 
 
 static COMMAND_LIST cmdline_commands[] =
 {

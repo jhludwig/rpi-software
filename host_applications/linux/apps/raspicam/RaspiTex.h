@@ -178,6 +178,8 @@ typedef struct RASPITEX_STATE
 
    RASPITEX_CAPTURE capture;           /// Frame-buffer capture state
 
+   char filter_name[250];              /// fixed length field for pathname to filter. 
+
 } RASPITEX_STATE;
 
 int raspitex_init(RASPITEX_STATE *state);
